@@ -6,10 +6,10 @@ galaxy_info:
   license: BSD (default)
   min_ansible_version: 1.7  
   platforms:  
-  - name: Ubuntu
-   versions:
-   - all  
+    - name: Ubuntu
+      versions:
+       - all  
   categories:  
-  - networking  
-  - system
+   - networking  
+   - system
 dependencies: []
