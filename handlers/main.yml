@@ -2,5 +2,5 @@
 ---
 - name: Restart Samba and WinBind
   service:
-    name: samba
+    name: smbd
     state: restarted

@@ -66,15 +66,19 @@
     enabled: yes
   tags: samba
 
-- name: Firewall rules for Samba file share
-  firewalld:
-    service: "{{ item[0] }}"
-    permanent: "{{ item[1] }}"
-    state: enabled
-  with_nested:
-    - [ samba ]
-    - [ true, false ]
-  tags: samba
+# - name: Firewall rules for Samba file share
+#   firewalld:
+#     service: "{{ item[0] }}"
+#     permanent: "{{ item[1] }}"
+#     state: enabled
+#   with_nested:
+#     - [ samba ]
+#     - [ true, false ]
+#   tags: samba
+
+- name: Create users if they don't exist yet
+  user: name={{item.name}} createhome=no groups=sambashare shell=/bin/false system=yes
+  with_items: samba_users
 
 - name: Create Samba users if they don't exist yet
   shell: >
@@ -84,3 +88,10 @@
   with_items: samba_users
   when: samba_users is defined
   tags: samba
+
+- name: Ensure samba shares root is a directory owned by sambashare
+  file: path={{samba_shares_root}} state=directory owner=root group=sambashare mode=2755
+
+- name: Ensure each share is a directory owned by sambashare
+  file: path={{samba_shares_root}}/{{item.name}} state=directory owner=root group=sambashare mode=2775
+  with_items: samba_shares
