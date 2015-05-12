@@ -1,6 +1,8 @@
 # File: roles/samba/handlers/main.yml
 ---
 - name: Restart Samba and WinBind
+  sudo: yes
   service:
     name: smbd
     state: restarted
+  ignore_errors: yes
